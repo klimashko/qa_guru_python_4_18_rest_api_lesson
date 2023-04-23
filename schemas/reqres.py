@@ -36,10 +36,10 @@ single_user_schema = Schema(
         "last_name": str,
         "avatar": str
     },
-    "support": {
-        "url": str,
-        "text": str
-    }},
+        "support": {
+            "url": str,
+            "text": str
+        }},
     extra=PREVENT_EXTRA,
     required=True
 )
@@ -54,10 +54,10 @@ login_schema = Schema(
 
 create_user_schema = Schema(
     {
-    "name": str,
-    "job": str,
-    "id": str,
-    "createdAt": str
+        "name": str,
+        "job": str,
+        "id": str,
+        "createdAt": str
     },
     extra=PREVENT_EXTRA,
     required=True
@@ -65,7 +65,34 @@ create_user_schema = Schema(
 
 register_unsuccessfull_schema = Schema(
     {
-    "error": "Missing password"
+        "error": str
+    },
+    extra=PREVENT_EXTRA,
+    required=True
+)
+
+update_user_schema = Schema(
+    {
+        'name': str,
+        'job': str,
+        'updatedAt': str
+    },
+    extra=PREVENT_EXTRA,
+    required=True
+)
+
+register_user_schema = Schema(
+    {
+        "id": int,
+        "token": str
+    },
+    extra=PREVENT_EXTRA,
+    required=True
+)
+
+unsuccessfull_login_schema = Schema(
+    {
+        "error": str
     },
     extra=PREVENT_EXTRA,
     required=True
