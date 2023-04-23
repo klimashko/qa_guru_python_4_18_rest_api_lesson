@@ -62,3 +62,11 @@ create_user_schema = Schema(
     extra=PREVENT_EXTRA,
     required=True
 )
+
+register_unsuccessfull_schema = Schema(
+    {
+    "error": "Missing password"
+    },
+    extra=PREVENT_EXTRA,
+    required=True
+)

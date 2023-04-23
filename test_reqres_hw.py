@@ -3,7 +3,7 @@ from pytest_voluptuous import S
 from requests import Response
 
 from schemas.reqres import single_user_schema, login_schema, \
-    create_user_schema
+    create_user_schema, register_unsuccessfull_schema
 
 
 def test_get_users_users_quantity():
@@ -58,3 +58,24 @@ def test_post_create_user():
     assert S(create_user_schema) == response.json()
     assert response.json()['name'] == 'morpheus'
     assert response.json()['job'] == 'leader'
+
+def test_post_register_unsuccessfull():
+    """Проверяем, что нельзя зарегистрироваться без пароля, проверяем ответ на соответствие register_unsuccessfull_schema."""
+
+    url = 'https://reqres.in/api/register'
+    payload = {'email': 'sydney@fife'}
+
+    response: Response = requests.post(url, data=payload)
+
+    assert response.status_code == 400
+    assert S(register_unsuccessfull_schema) == response.json()
+    assert response.json()['error'] == 'Missing password'
+
+def test_delete_user():
+    """Проверяем delete запрос."""
+
+    url = 'https://reqres.in/api/users/2'
+
+    response: Response = requests.delete(url)
+
+    assert response.status_code == 204
