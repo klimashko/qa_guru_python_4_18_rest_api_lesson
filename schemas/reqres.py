@@ -47,7 +47,9 @@ single_user_schema = Schema(
 login_schema = Schema(
     {
         'token': str
-    }
+    },
+    extra=PREVENT_EXTRA,
+    required=True
 )
 
 create_user_schema = Schema(
