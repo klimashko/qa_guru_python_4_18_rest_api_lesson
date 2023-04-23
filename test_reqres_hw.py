@@ -3,28 +3,8 @@ import requests
 from pytest_voluptuous import S
 from requests import Response
 
-from schemas.reqres import list_users_schema, single_user_schema, login_schema
-
-
-# def test_get_users_page_number():
-#     """Когда запросили вторую страницу, убеждаемся что вернулась вторая страница."""
-#     url = "https://reqres.in/api/users?page=2"
-#
-#     response: Response = requests.get(url)
-#
-#     assert response.status_code == 200
-#     assert response.json()["page"] == 2
-#
-#
-# def test_get_users_users_on_page():
-#     """Проверяем дефолтное количество пользователей на странице и что вернулось столько же пользователей."""
-#     url = "https://reqres.in/api/users?page=2"
-#
-#     response: Response = requests.get(url)
-#     per_page = response.json()["per_page"]
-#     data_len = len(response.json()["data"])
-#
-#     assert data_len == per_page == 6
+from schemas.reqres import list_users_schema, single_user_schema, login_schema, \
+    create_user_schema
 
 
 def test_get_users_users_quantity():
@@ -58,3 +38,24 @@ def test_post_login_user():
     assert S(login_schema) == response.json()
     assert response.json()['token'] == 'QpwL5tke4Pnpja7X4'
 
+def test_single_user_not_found():
+    """Проверяем get запрос для несуществующего юзера - single user not found."""
+
+    url = 'https://reqres.in/api/users/23'
+
+    response: Response = requests.get(url)
+
+    assert response.status_code == 404
+
+def test_post_create_user():
+    """Проверяем, что ответ на post запрос соответствует create_user_schema, проверяем значения данных юзера."""
+
+    url = 'https://reqres.in/api/users'
+    payload = {'name': 'morpheus', 'job': 'leader'}
+
+    response: Response = requests.post(url, data=payload)
+
+    assert response.status_code == 201
+    assert S(create_user_schema) == response.json()
+    assert response.json()['name'] == 'morpheus'
+    assert response.json()['job'] == 'leader'
